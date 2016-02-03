@@ -7,6 +7,8 @@ Title:  Media Player
   
 Description:  Our goal is to build a Media Player that is easily extended to meet users’ unique needs. 
 
+Platform/Environment:  Java application for Linux, Windows, and OS X using Swing and Java Media Framework
+
 Programming Languages:  Java
 
 Functionality:
@@ -16,11 +18,12 @@ Functionality:
   * Users can choose from multiple skin options
   * Users can bookmark times in particular media files
   * Users can crop and zoom media files
-  * Users can apply custom filters to still images
 
 [OPTIONAL]	Stretch	Functionality:	
   * Users can convert between file formats
   * Users can enable, disable, or find subtitles
+  * Users can apply custom filters to still images
+
 
 
 
