@@ -11,7 +11,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MediaPlayer {
+public class MediaPlayer 
+{
 
     /**
      * @param args the command line arguments
@@ -35,7 +36,8 @@ public class MediaPlayer {
                 Class className = Class.forName(fullClassName);
                 Constructor con = className.getConstructor(GuiModel.class);
                 model = (GuiModel) con.newInstance(model);
-            } catch (Exception ex) 
+            } 
+            catch (Exception ex) 
             {
                     Logger.getLogger(MediaPlayer.class.getName()).log(Level.SEVERE, null, ex);
             }

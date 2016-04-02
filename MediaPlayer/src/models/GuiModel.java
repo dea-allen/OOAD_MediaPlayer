@@ -18,8 +18,10 @@ public abstract class GuiModel
     public JList currentMedia;
     
     public JPanel controlPanel;
+    public JPanel controlButtonPanel;
     public JButton playButton;
     public JButton stopButton;
+    public JPanel controlSliderPanel;
     public JSlider seekSlider;
  
     public abstract void drawGui();

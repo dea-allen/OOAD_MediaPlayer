@@ -1,6 +1,6 @@
 package models;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 
@@ -35,20 +35,25 @@ public class ConcreteGuiModel extends GuiModel {
     }
     void setupCurrentMediaPanel()
     {   
-        currentMediaPanel = new JPanel();
+        currentMediaPanel = new JPanel(new GridLayout(1,4,4,4));
         currentMedia = generateCurrentList();
         currentMediaScrollPane = new JScrollPane(currentMedia);
         currentMediaPanel.add(currentMediaScrollPane);      
     }   
     void setupControlPanel()
     {
-        controlPanel = new JPanel();
-        playButton = new JButton();
-        stopButton = new JButton();
+        controlPanel = new JPanel(new GridLayout(2,1));
+        controlButtonPanel = new JPanel(new GridLayout(1,2));
+        playButton = new JButton("Play");
+        stopButton = new JButton("Stop");
+        controlSliderPanel = new JPanel(new GridLayout(1,1));
         seekSlider = new JSlider();
-        controlPanel.add(playButton);
-        controlPanel.add(stopButton);
-        controlPanel.add(seekSlider);
+        controlButtonPanel.add(playButton);
+        controlButtonPanel.add(stopButton);
+        controlSliderPanel.add(seekSlider);
+        controlPanel.add(controlButtonPanel);
+        controlPanel.add(controlSliderPanel);
+        
     }
     
     JList generateCurrentList()

@@ -1,27 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modules;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import javax.swing.*;
-import models.GuiDecorator;
-import models.GuiModel;
+import models.*;
 
-/**
- *
- * @author Ernie
- */
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
-    private JFrame _frame;
+    private final JFrame _frame;
     
     private JPanel playlistPanel;
     private JButton showPlaylistButton;
-
-    public ConcreteGuiPlaylistDecorator(GuiModel base) {
+    private JList playlists;
+    private JScrollPane playlistScrollPane;
+    private JButton createPlaylistButton;
+    private JButton deletePlaylistButton;
+    private JButton addPlaylistButton;
+    private JPanel selectedPlaylistPanel;
+    private JScrollPane selectPlaylistScrollPane;
+    private JButton deleteMediaButton;
+    private JList medias;
+   
+    public ConcreteGuiPlaylistDecorator(GuiModel base) 
+    {
         super(base);
         _frame = base.frame;
     }
@@ -30,9 +30,10 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     public void drawGui()
     {
         super.drawGui();
-        playlistPanel = new JPanel();
-        showPlaylistButton = new JButton();
+        playlistPanel = new JPanel(new GridLayout(1,1));
+        showPlaylistButton = new JButton("Show");
         playlistPanel.add(showPlaylistButton);
+        
         _frame.add(playlistPanel, BorderLayout.EAST);
         _frame.setVisible(true);
     }

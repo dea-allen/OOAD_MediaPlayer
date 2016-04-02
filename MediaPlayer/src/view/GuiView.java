@@ -3,7 +3,8 @@ import models.GuiModel;
 import java.awt.*;
 import javax.swing.*;
         
-public class GuiView {
+public class GuiView 
+{
     private EventMapper _eventMapper;
     
     public GuiView(GuiModel gui)
