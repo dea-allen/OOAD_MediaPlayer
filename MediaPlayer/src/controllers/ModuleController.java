@@ -1,4 +1,4 @@
-package controller;
+package controllers;
 
 import java.io.*;
 import java.util.*;
@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import javax.json.*;
 import javax.json.stream.JsonParser;
 
-import model.GuiModel;
+import models.GuiModel;
 
 public class ModuleController 
 {

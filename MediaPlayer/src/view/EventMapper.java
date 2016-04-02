@@ -1,9 +1,10 @@
 package view;
 
+import controllers.ModuleController;
+import controllers.PlaylistController;
 import javafx.event.ActionEvent;
 import javax.swing.*;
-import controller.*;
-import controller.PlayerController.ConcretePlayerController;
+import controllers.PlayerController.ConcretePlayerController;
 
 public class EventMapper {
     private ModuleController _moduleController;

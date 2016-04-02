@@ -1,4 +1,4 @@
-package controller.PlayerController;
+package controllers.PlayerController;
 
 public class ConcretePlayerController extends PlayerController {
     

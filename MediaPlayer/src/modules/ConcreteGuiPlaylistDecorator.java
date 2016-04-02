@@ -7,8 +7,8 @@ package modules;
 
 import java.awt.BorderLayout;
 import javax.swing.*;
-import model.GuiDecorator;
-import model.GuiModel;
+import models.GuiDecorator;
+import models.GuiModel;
 
 /**
  *
@@ -17,6 +17,7 @@ import model.GuiModel;
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
     private JFrame _frame;
+    
     private JPanel playlistPanel;
     private JButton showPlaylistButton;
 

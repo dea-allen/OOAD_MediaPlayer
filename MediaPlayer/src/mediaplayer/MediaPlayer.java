@@ -1,8 +1,9 @@
 package mediaplayer;
 
-import model.*;
+import models.GuiModel;
+import models.ConcreteGuiModel;
+import controllers.ModuleController;
 import view.*;
-import controller.*;
 import modules.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

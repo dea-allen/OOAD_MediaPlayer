@@ -1,7 +1,7 @@
 package view;
+import models.GuiModel;
 import java.awt.*;
 import javax.swing.*;
-import model.*;
         
 public class GuiView {
     private EventMapper _eventMapper;

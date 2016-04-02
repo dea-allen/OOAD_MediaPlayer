@@ -1,4 +1,4 @@
-package model;
+package models;
 
 import java.awt.BorderLayout;
 import java.io.File;
