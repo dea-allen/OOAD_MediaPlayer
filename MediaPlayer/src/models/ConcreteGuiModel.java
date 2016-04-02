@@ -73,12 +73,13 @@ public class ConcreteGuiModel extends GuiModel {
     }
     
     @Override
-    public void drawGui()
+    public GuiModel drawGui()
     {
         frame.getContentPane().add(menubar, BorderLayout.NORTH);
         frame.getContentPane().add(currentMediaPanel, BorderLayout.WEST);
         frame.getContentPane().add(controlPanel, BorderLayout.CENTER);
         frame.setVisible(true); 
-
+        
+        return this;
     }
 }

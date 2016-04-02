@@ -7,12 +7,15 @@ import models.*;
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
     // variables to modify base model
-    private final JFrame _frame;
+    //private final JFrame _frame;
     
+    // decorations
     private JPanel playlistPanel;
     private JPanel showPlaylistPanel;
     private JButton showPlaylistButton;
-    private JPanel openPlaylistPanel;
+    
+    public JPanel openPlaylistPanel;
+    
     private JPanel controlPlaylistPanel;
     private JList playlists;
     private JScrollPane playlistScrollPane;
@@ -27,18 +30,38 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     public ConcreteGuiPlaylistDecorator(GuiModel base) 
     {
         super(base);
-        _frame = base.frame;
+        frame = base.frame;
     }
     
     @Override
-    public void drawGui()
+    public GuiModel drawGui()
     {
         super.drawGui();
+        
+        setupShowPlaylistPanel();
+        setupOpenPlaylistPanel();
+        setupSelectedPlaylistPanel();
+        
+        playlistPanel.add(showPlaylistPanel, BorderLayout.WEST);
+        playlistPanel.add(openPlaylistPanel, BorderLayout.CENTER);
+        playlistPanel.add(selectedPlaylistPanel, BorderLayout.EAST);
+
+        frame.add(playlistPanel, BorderLayout.EAST);
+        frame.setSize(800, 300);   
+        frame.setVisible(true);
+        
+        return this;
+    }
+    public void setupShowPlaylistPanel()
+    {
         playlistPanel = new JPanel(new BorderLayout());
         showPlaylistPanel = new JPanel(new GridLayout(1,1));
         showPlaylistButton = new JButton("Show");
+        showPlaylistButton.setActionCommand("PlaylistController.showPlaylists");
         showPlaylistPanel.add(showPlaylistButton);
-        
+    }
+    public void setupOpenPlaylistPanel()
+    {
         openPlaylistPanel = new JPanel(new BorderLayout());
         controlPlaylistPanel = new JPanel(new GridLayout(1,3));
         addPlaylistButton = new JButton("+");
@@ -50,16 +73,12 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         playlistScrollPane = new JScrollPane();
         openPlaylistPanel.add(controlPlaylistPanel, BorderLayout.NORTH);
         openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
-        
-        selectedPlaylistPanel = new JPanel(new BorderLayout(1,1));
-        
-        
-        playlistPanel.add(showPlaylistPanel, BorderLayout.WEST);
-        playlistPanel.add(openPlaylistPanel, BorderLayout.CENTER);
-
-        _frame.add(playlistPanel, BorderLayout.EAST);
-        _frame.setSize(500, 300);   
-        _frame.setVisible(true);
     }
-    
+    public void setupSelectedPlaylistPanel()
+    {
+        selectedPlaylistPanel = new JPanel(new BorderLayout(1,1));
+        playlists = new JList();
+        // get playlists from PlaylistController or decorate PlayerController with PlaylistController?
+        
+    }
 }

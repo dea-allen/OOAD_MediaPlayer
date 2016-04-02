@@ -20,7 +20,8 @@ public class MediaPlayer
     public static void main(String[] args) 
     {
         GuiModel model = decorateGuiModel();
-        GuiView view = new GuiView(model);
+        GuiView view = null; 
+        view.getView(model);
     }
     
     private static GuiModel decorateGuiModel()

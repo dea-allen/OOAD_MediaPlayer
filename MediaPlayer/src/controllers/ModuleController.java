@@ -32,11 +32,12 @@ public class ModuleController
         return list;
     }
     
-/*    public void addModule(<T> module)
+    public void addModule()
     {
-        JsonObject model = Json.createObjectBuilder()
+/*        JsonObject model = Json.createObjectBuilder()
                 .add("GuiModules", Json.createArrayBuilder())
                 .build();
-    }
 */
+    }
+
 }

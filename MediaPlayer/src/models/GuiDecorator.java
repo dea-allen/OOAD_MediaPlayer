@@ -13,5 +13,5 @@ public abstract class GuiDecorator extends GuiModel {
     private GuiModel baseGui;
     public GuiDecorator(GuiModel base) { baseGui = base; }
     @Override
-    public void drawGui() { baseGui.drawGui(); }
+    public GuiModel drawGui() { return baseGui.drawGui(); }
 }

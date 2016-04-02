@@ -24,5 +24,5 @@ public abstract class GuiModel
     public JPanel controlSliderPanel;
     public JSlider seekSlider;
  
-    public abstract void drawGui();
+    public abstract GuiModel drawGui();
 }
