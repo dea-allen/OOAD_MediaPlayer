@@ -1,11 +1,26 @@
 package model;
 
+import java.awt.BorderLayout;
 import java.io.File;
 import javax.swing.*;
 
 public class ConcreteGuiModel extends GuiModel {
     public ConcreteGuiModel() 
     {
+        setupFrame();
+        setupMenu();
+        setupCurrentMediaPanel();
+        setupControlPanel();
+    }
+    void setupFrame()
+    {
+        frame = new JFrame();
+        frame.getContentPane().setLayout(new BorderLayout());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 300);   
+    }
+    void setupMenu()
+    { 
         menubar = new JMenuBar();
         fileMenu = new JMenu("File");
         openFileMenuItem = new JMenuItem("Open File");
@@ -16,10 +31,17 @@ public class ConcreteGuiModel extends GuiModel {
         moduleMenu = new JMenu("Modules");
         addModuleMenuItem = new JMenuItem("Add Module");
         moduleMenu.add(addModuleMenuItem);
-        menubar.add(moduleMenu);
-        
-        displayCurrentMedia();
-        
+        menubar.add(moduleMenu); 
+    }
+    void setupCurrentMediaPanel()
+    {   
+        currentMediaPanel = new JPanel();
+        currentMedia = generateCurrentList();
+        currentMediaScrollPane = new JScrollPane(currentMedia);
+        currentMediaPanel.add(currentMediaScrollPane);      
+    }   
+    void setupControlPanel()
+    {
         controlPanel = new JPanel();
         playButton = new JButton();
         stopButton = new JButton();
@@ -29,14 +51,6 @@ public class ConcreteGuiModel extends GuiModel {
         controlPanel.add(seekSlider);
     }
     
-    void displayCurrentMedia()
-    {   
-        currentMediaPanel = new JPanel();
-        currentMedia = generateCurrentList();
-        currentMediaScrollPane = new JScrollPane(currentMedia);
-        currentMediaPanel.add(currentMediaScrollPane);
-        
-    }   
     JList generateCurrentList()
     {
         DefaultListModel currentMediaModel = new DefaultListModel();
@@ -47,9 +61,19 @@ public class ConcreteGuiModel extends GuiModel {
         currentMediaModel.addElement("Length: ");
         return new JList(currentMediaModel);
     }
+    
     void setFileInfo(File file)
     {
         
     }
     
+    @Override
+    public void drawGui()
+    {
+        frame.getContentPane().add(menubar, BorderLayout.NORTH);
+        frame.getContentPane().add(currentMediaPanel, BorderLayout.WEST);
+        frame.getContentPane().add(controlPanel, BorderLayout.CENTER);
+        frame.setVisible(true); 
+
+    }
 }

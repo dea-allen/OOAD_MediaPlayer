@@ -1,0 +1,4 @@
+[
+        { "GuiModel": "ConcreteGuiPlaylistDecorator" },
+        { "PlayerController": "ConcretePlaylistController" }
+]

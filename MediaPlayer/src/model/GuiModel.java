@@ -4,6 +4,8 @@ import javax.swing.*;
 
 public abstract class GuiModel 
 {    
+    public JFrame frame;
+
     public JMenuBar menubar;
     public JMenu fileMenu;
     public JMenuItem openFileMenuItem;
@@ -19,8 +21,6 @@ public abstract class GuiModel
     public JButton playButton;
     public JButton stopButton;
     public JSlider seekSlider;
-    
-   // public JButton showPlaylistButton;
-
-    
+ 
+    public abstract void drawGui();
 }
