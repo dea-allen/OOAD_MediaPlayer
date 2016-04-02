@@ -10,13 +10,10 @@ public class GuiView
     private final GuiModel _gui;
     private static GuiView _view = null;
     
-    private GuiView() 
-    {
-        _gui = new ConcreteGuiModel();
-    }
-    
     private GuiView(GuiModel gui)
     {
+        if (gui == null)
+            gui = new ConcreteGuiModel();
         _gui = gui.drawGui();
         _eventMapper.addAllActionListeners(_gui);     
     }
@@ -24,7 +21,7 @@ public class GuiView
     public static synchronized GuiView getView(GuiModel model)
     {
         if (_view == null)
-           _view = (model == null) ? new GuiView() : new GuiView(model);
+           _view = new GuiView(model);
         return _view;
     }
     

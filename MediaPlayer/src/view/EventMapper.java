@@ -13,7 +13,7 @@ import javax.swing.*;
 
 public class EventMapper implements ActionListener 
 {
-        public void addAllActionListeners(GuiModel gui)
+    public void addAllActionListeners(GuiModel gui)
     {
         java.util.List<Component> items = getAllComponents(gui.frame);
         for (Component c: items)
