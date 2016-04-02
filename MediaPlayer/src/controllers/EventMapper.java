@@ -1,7 +1,5 @@
-package view;
+package controllers;
 
-import controllers.*;
-import controllers.PlayerController.*;
 import models.*;
 
 import java.awt.event.ActionEvent;

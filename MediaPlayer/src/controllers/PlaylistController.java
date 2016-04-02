@@ -4,11 +4,10 @@ import view.*;
 import modules.*;
 
 public class PlaylistController {
-    private GuiView _view;
     
     public void showPlaylists()
     {
-        ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) _view.getView(null).getGuiModel();
+        ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
         gui.openPlaylistPanel.setVisible(!gui.openPlaylistPanel.isVisible());
     }
 }

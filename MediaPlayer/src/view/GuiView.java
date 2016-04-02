@@ -1,17 +1,15 @@
 package view;
+import controllers.EventMapper;
 import models.*;
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
         
 public class GuiView 
 {
-    private final EventMapper _eventMapper = new EventMapper();
-    private final GuiModel _gui;
+    private static GuiModel _gui = null;
     private static GuiView _view = null;
     
     private GuiView(GuiModel gui)
     {
+        EventMapper _eventMapper = new EventMapper();
         if (gui == null)
             gui = new ConcreteGuiModel();
         _gui = gui.drawGui();
