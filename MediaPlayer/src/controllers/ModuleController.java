@@ -38,19 +38,33 @@ public class ModuleController
     
     public void addModule()
     {
+        File file = getFile();
+        addToModulesDirectory(file);
+        addToModulesJson(file.getName());
+    }
+    private File getFile()
+    {
+        File file = null;
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Java Classes", "java");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(GuiView.getView(null).getGuiModel().frame);
         if(returnVal == JFileChooser.APPROVE_OPTION)
         {
-            File file = chooser.getSelectedFile();
-            String fileName = file.getName();
+            file = chooser.getSelectedFile();
         }
+        return file;
+    }
+    private void addToModulesDirectory(File file)
+    {
+        
         /*        JsonObject model = Json.createObjectBuilder()
                 .add("GuiModules", Json.createArrayBuilder())
                 .build();
         */
     }
-
+    private void addToModulesJson(String moduleClassName)
+    {
+        
+    }
 }
