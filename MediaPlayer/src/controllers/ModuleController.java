@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.*;
+import java.nio.file.*;
+import static java.nio.file.StandardCopyOption.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,11 +14,14 @@ import view.*;
 
 public class ModuleController 
 {
+    private static final String MODULE_DIR = "/Users/Ernie/Desktop/OOAD/OOAD_MediaPlayer/MediaPlayer/src/modules/";
+    private static final String MODULES_JSON = "modules.json";
+    
     public ModuleController() {};
     
     public List<String> getGuiModelModules()
     {
-        File moduleFile = new File("/Users/Ernie/Desktop/OOAD/OOAD_MediaPlayer/MediaPlayer/src/modules/modules.json");
+        File moduleFile = new File(MODULE_DIR + MODULES_JSON);
         JsonReader reader;
         List<String> list = new ArrayList<String>();
         try 
@@ -39,8 +44,8 @@ public class ModuleController
     public void addModule()
     {
         File file = getFile();
-        addToModulesDirectory(file);
-        addToModulesJson(file.getName());
+        addToDirectory(file);
+        addToJson(file.getName());
     }
     private File getFile()
     {
@@ -55,16 +60,48 @@ public class ModuleController
         }
         return file;
     }
-    private void addToModulesDirectory(File file)
+    private void addToDirectory(File file)
     {
-        
-        /*        JsonObject model = Json.createObjectBuilder()
-                .add("GuiModules", Json.createArrayBuilder())
-                .build();
-        */
+        try 
+        {
+            Path moduleDirPath = Paths.get(MODULE_DIR + file.getName());
+            Path source = Paths.get(file.getPath());
+            Files.move(source, moduleDirPath, REPLACE_EXISTING);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    private void addToModulesJson(String moduleClassName)
+    private void addToJson(String moduleClassName)
     {
+        RandomAccessFile file = null;
+        try 
+        {
+            String jsonStr = Json.createObjectBuilder()
+                    .add("Modules", moduleClassName)
+                    .build()
+                    .toString();
+            // adapted from: http://stackoverflow.com/questions/26250009/append-json-element-to-json-array-in-file-using-java
+            file = new RandomAccessFile(MODULE_DIR + MODULES_JSON, "rw");
+            long pos = file.length();
+            while (file.length() > 0)
+            {
+                pos--;
+                file.seek(pos);
+                if (file.readByte() == ']')
+                {
+                    file.seek(pos);
+                    break;
+                }
+            }
+            file.writeBytes("," + jsonStr + "]");
+            file.close();
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 }
