@@ -9,11 +9,11 @@ public class GuiView
     
     private GuiView(GuiModel gui)
     {
-        EventMapper _eventMapper = new EventMapper();
+        EventMapper eventMapper = new EventMapper();
         if (gui == null)
             gui = new ConcreteGuiModel();
         _gui = gui.drawGui();
-        _eventMapper.addAllActionListeners(_gui);     
+        eventMapper.addAllActionListeners(_gui);     
     }
     
     public static synchronized GuiView getView(GuiModel model)

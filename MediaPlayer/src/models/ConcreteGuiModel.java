@@ -5,6 +5,8 @@ import java.io.File;
 import javax.swing.*;
 
 public class ConcreteGuiModel extends GuiModel {
+    private static final String CONTROLLER = "PlayerController";
+    
     public ConcreteGuiModel() 
     {
         setupFrame();
@@ -46,10 +48,12 @@ public class ConcreteGuiModel extends GuiModel {
         controlButtonPanel = new JPanel(new GridLayout(1,2));
         playButton = new JButton("Play");
         stopButton = new JButton("Stop");
-        controlSliderPanel = new JPanel(new GridLayout(1,1));
-        seekSlider = new JSlider();
+        playButton.setActionCommand(CONTROLLER + ".play");
+        stopButton.setActionCommand(CONTROLLER + ".stop"); 
         controlButtonPanel.add(playButton);
         controlButtonPanel.add(stopButton);
+        controlSliderPanel = new JPanel(new GridLayout(1,1));
+        seekSlider = new JSlider();
         controlSliderPanel.add(seekSlider);
         controlPanel.add(controlButtonPanel);
         controlPanel.add(controlSliderPanel);

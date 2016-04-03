@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.*;
-import javax.json.stream.JsonParser;
 
 import models.GuiModel;
 

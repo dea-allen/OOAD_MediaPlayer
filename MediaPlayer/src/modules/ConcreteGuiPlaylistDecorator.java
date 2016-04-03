@@ -6,10 +6,8 @@ import models.*;
 
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
-    // variables to modify base model
-    //private final JFrame _frame;
+    private static final String CONTROLLER = "PlaylistController";
     
-    // decorations
     private JPanel playlistPanel;
     private JPanel showPlaylistPanel;
     private JButton showPlaylistButton;
@@ -57,7 +55,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         playlistPanel = new JPanel(new BorderLayout());
         showPlaylistPanel = new JPanel(new GridLayout(1,1));
         showPlaylistButton = new JButton("Show");
-        showPlaylistButton.setActionCommand("PlaylistController.showPlaylists");
+        showPlaylistButton.setActionCommand(CONTROLLER + ".showPlaylists");
         showPlaylistPanel.add(showPlaylistButton);
     }
     public void setupOpenPlaylistPanel()
