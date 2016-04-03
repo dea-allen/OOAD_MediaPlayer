@@ -1,4 +1,3 @@
 [
-        { "GuiModel": "ConcreteGuiPlaylistDecorator" },
-        { "PlayerController": "ConcretePlaylistController" }
+        { "Module": "ConcreteGuiPlaylistDecorator" }
 ]

@@ -23,7 +23,14 @@ public class EventMapper implements ActionListener
                 JButton b = (JButton) c;
                 b.addActionListener(this);
             }
-
+            if (c.getClass() == JMenu.class)
+            {
+                JMenu m = (JMenu) c;
+                for (int i = 0; i < m.getItemCount(); i++) 
+                {
+                    m.getItem(i).addActionListener(this);
+                }
+            }
         }
     }
     // adpated this from: http://stackoverflow.com/questions/6495769/how-to-get-all-elements-inside-a-jframe

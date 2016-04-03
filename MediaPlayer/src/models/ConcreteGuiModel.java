@@ -4,8 +4,10 @@ import java.awt.*;
 import java.io.File;
 import javax.swing.*;
 
-public class ConcreteGuiModel extends GuiModel {
-    private static final String CONTROLLER = "PlayerController";
+public class ConcreteGuiModel extends GuiModel 
+{
+    private static final String PLAYER_CONTROLLER = "PlayerController";
+    private static final String MODULE_CONTROLLER = "ModuleController";
     
     public ConcreteGuiModel() 
     {
@@ -32,6 +34,8 @@ public class ConcreteGuiModel extends GuiModel {
         menubar.add(fileMenu);
         moduleMenu = new JMenu("Modules");
         addModuleMenuItem = new JMenuItem("Add Module");
+        addModuleMenuItem.setActionCommand(MODULE_CONTROLLER + ".addModule");
+        
         moduleMenu.add(addModuleMenuItem);
         menubar.add(moduleMenu); 
     }
@@ -48,8 +52,8 @@ public class ConcreteGuiModel extends GuiModel {
         controlButtonPanel = new JPanel(new GridLayout(1,2));
         playButton = new JButton("Play");
         stopButton = new JButton("Stop");
-        playButton.setActionCommand(CONTROLLER + ".play");
-        stopButton.setActionCommand(CONTROLLER + ".stop"); 
+        playButton.setActionCommand(PLAYER_CONTROLLER + ".play");
+        stopButton.setActionCommand(PLAYER_CONTROLLER + ".stop"); 
         controlButtonPanel.add(playButton);
         controlButtonPanel.add(stopButton);
         controlSliderPanel = new JPanel(new GridLayout(1,1));
@@ -79,7 +83,7 @@ public class ConcreteGuiModel extends GuiModel {
     @Override
     public GuiModel drawGui()
     {
-        frame.getContentPane().add(menubar, BorderLayout.NORTH);
+        frame.setJMenuBar(menubar);
         frame.getContentPane().add(currentMediaPanel, BorderLayout.WEST);
         frame.getContentPane().add(controlPanel, BorderLayout.CENTER);
         frame.setVisible(true); 

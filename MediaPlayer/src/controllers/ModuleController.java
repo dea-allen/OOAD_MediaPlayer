@@ -5,8 +5,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.*;
+import javax.swing.*;
+import javax.swing.filechooser.*;
 
-import models.GuiModel;
+import view.*;
 
 public class ModuleController 
 {
@@ -17,15 +19,18 @@ public class ModuleController
         File moduleFile = new File("/Users/Ernie/Desktop/OOAD/OOAD_MediaPlayer/MediaPlayer/src/modules/modules.json");
         JsonReader reader;
         List<String> list = new ArrayList<String>();
-        try {
+        try 
+        {
             reader = Json.createReader(new FileInputStream(moduleFile));
             JsonArray modules = reader.readArray();
             reader.close();
             for(int i = 0; i < modules.size(); i++)
             {
-                list.add(modules.getJsonObject(i).getString("GuiModel"));
+                list.add(modules.getJsonObject(i).getString("Module"));
             }
-        } catch (Exception ex) {
+        } 
+        catch (Exception ex) 
+        {
             Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
@@ -33,10 +38,19 @@ public class ModuleController
     
     public void addModule()
     {
-/*        JsonObject model = Json.createObjectBuilder()
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Java Classes", "java");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(GuiView.getView(null).getGuiModel().frame);
+        if(returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            File file = chooser.getSelectedFile();
+            String fileName = file.getName();
+        }
+        /*        JsonObject model = Json.createObjectBuilder()
                 .add("GuiModules", Json.createArrayBuilder())
                 .build();
-*/
+        */
     }
 
 }
