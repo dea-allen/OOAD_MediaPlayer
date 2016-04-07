@@ -64,6 +64,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         controlPlaylistPanel = new JPanel(new GridLayout(1,3));
         addPlaylistButton = new JButton("+");
         createPlaylistButton = new JButton("Create Playlist");
+        createPlaylistButton.setActionCommand(CONTROLLER + ".createPlaylist");
         deletePlaylistButton = new JButton("X");
         controlPlaylistPanel.add(addPlaylistButton);
         controlPlaylistPanel.add(createPlaylistButton);
