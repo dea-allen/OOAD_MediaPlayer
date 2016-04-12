@@ -1,7 +1,10 @@
 package controllers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -14,7 +17,9 @@ import modules.*;
 public class PlaylistController 
 {
     private static final String DATA_DIR = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
+    private static final String JSON_PATH = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
     private static final String DATA_JSON = "playlists.json";
+    private static final String JSON = ".json";
     
     public void showPlaylists()
     {
@@ -26,18 +31,37 @@ public class PlaylistController
     {
         ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
         String name = JOptionPane.showInputDialog(gui.frame, "Enter Plyalist Name:");
-        File file = getFile();
         addToJson("Playlist", name);
-        addToJson(name, file.getPath());
         gui.playlistModel.addElement(name);
+        
+        try 
+        {
+            PrintWriter writer = new PrintWriter(JSON_PATH + name + JSON, "UTF-8");
+            writer.println("[");
+            writer.println("]");
+            writer.close();
+        }
+        catch (FileNotFoundException | UnsupportedEncodingException ex) 
+        {
+            Logger.getLogger(PlaylistController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //addMedia();
+    }
+    
+    public void addToPlaylist()
+    {
+        ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
+        Object name = gui.playlists.getSelectedValue();
+        
+        File file = getFile();
+        addToJson(file.getPath(), name.toString(), JSON_PATH + name + JSON);
     }
     
     private File getFile()
     {
         File file = null;
         JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Java Classes", "java");
-        chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(GuiView.getView(null).getGuiModel().frame);
         if(returnVal == JFileChooser.APPROVE_OPTION)
         {
@@ -48,6 +72,12 @@ public class PlaylistController
     
     private void addToJson(String key, String value)
     {
+        String filename = DATA_DIR + DATA_JSON;
+        addToJson(key, value, filename);
+    }
+    
+    private void addToJson(String key, String value, String filename)
+    {
         RandomAccessFile file = null;
         try 
         {
@@ -56,7 +86,7 @@ public class PlaylistController
                     .build()
                     .toString();
             // adapted from: http://stackoverflow.com/questions/26250009/append-json-element-to-json-array-in-file-using-java
-            file = new RandomAccessFile(DATA_DIR + DATA_JSON, "rw");
+            file = new RandomAccessFile(filename, "rw");
             long pos = file.length();
             while (file.length() > 0)
             {

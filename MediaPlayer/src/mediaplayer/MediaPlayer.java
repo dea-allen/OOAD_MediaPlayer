@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.*;
 
 public class MediaPlayer 
 {
@@ -19,7 +20,7 @@ public class MediaPlayer
      */
     public static void main(String[] args) 
     {
-        GuiModel model = decorateGuiModel();
+        GuiModel model = decorateGuiModel();        
         GuiView.getView(model);
     }
     

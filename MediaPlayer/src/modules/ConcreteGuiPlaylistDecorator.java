@@ -1,28 +1,39 @@
 package modules;
 
+import controllers.ModuleController;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonReader;
 import javax.swing.*;
 import models.*;
 
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
     private static final String CONTROLLER = "PlaylistController";
+    private static final String MODULE_DIR = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
+    private static final String MODULES_JSON = "playlists.json";
     
     private JPanel playlistPanel;
     private JPanel showPlaylistPanel;
     private JButton showPlaylistButton;
     
-    private JList playlists;
     private JPanel controlPlaylistPanel;
     private JScrollPane playlistScrollPane;
     private JButton createPlaylistButton;
     private JButton deletePlaylistButton;
-    private JButton addPlaylistButton;
+    private JButton addToPlaylistButton;
     private JPanel selectedPlaylistPanel;
     private JScrollPane selectPlaylistScrollPane;
     private JButton deleteMediaButton;
     private JList medias;
     
+    public JList playlists;
     public JPanel openPlaylistPanel;
     public DefaultListModel playlistModel;
     
@@ -63,14 +74,18 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     {
         openPlaylistPanel = new JPanel(new BorderLayout());
         controlPlaylistPanel = new JPanel(new GridLayout(1,3));
-        addPlaylistButton = new JButton("+");
+        addToPlaylistButton = new JButton("+");
+        addToPlaylistButton.setActionCommand(CONTROLLER + ".addToPlaylist");
         createPlaylistButton = new JButton("Create Playlist");
         createPlaylistButton.setActionCommand(CONTROLLER + ".createPlaylist");
         deletePlaylistButton = new JButton("X");
-        controlPlaylistPanel.add(addPlaylistButton);
+        //deletePlaylistButton.setActionCommand(CONTROLLER + ".deletePlaylist");
+        controlPlaylistPanel.add(addToPlaylistButton);
         controlPlaylistPanel.add(createPlaylistButton);
         controlPlaylistPanel.add(deletePlaylistButton);
+        
         playlistModel = new DefaultListModel();
+        playlistModel = populateList();
         playlists = new JList(playlistModel);
         playlistScrollPane = new JScrollPane(playlists);
         
@@ -79,7 +94,28 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     }
     public void setupSelectedPlaylistPanel()
     {
-        selectedPlaylistPanel = new JPanel(new BorderLayout(1,1));
+        selectedPlaylistPanel = new JPanel(new BorderLayout(1,1));   
+    }
+    private static DefaultListModel populateList()
+    {
+        DefaultListModel playlists = new DefaultListModel();
         
+        File moduleFile = new File(MODULE_DIR + MODULES_JSON);
+        JsonReader reader;
+        try 
+        {
+            reader = Json.createReader(new FileInputStream(moduleFile));
+            JsonArray modules = reader.readArray();
+            reader.close();
+            for(int i = 0; i < modules.size(); i++)
+            {
+                playlists.addElement(modules.getJsonObject(i).getString("Playlist"));
+            }
+        } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return playlists;
     }
 }
