@@ -13,6 +13,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     private JButton showPlaylistButton;
     
     public JPanel openPlaylistPanel;
+    public DefaultListModel playlistModel;
     
     private JPanel controlPlaylistPanel;
     private JList playlists;
@@ -69,14 +70,17 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         controlPlaylistPanel.add(addPlaylistButton);
         controlPlaylistPanel.add(createPlaylistButton);
         controlPlaylistPanel.add(deletePlaylistButton);
-        playlistScrollPane = new JScrollPane();
+        
+        playlistModel = new DefaultListModel();
+        playlists = new JList(playlistModel);
+        playlistScrollPane = new JScrollPane(playlists);
+
         openPlaylistPanel.add(controlPlaylistPanel, BorderLayout.NORTH);
         openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
     }
     public void setupSelectedPlaylistPanel()
     {
         selectedPlaylistPanel = new JPanel(new BorderLayout(1,1));
-        playlists = new JList();
         // get playlists from PlaylistController or decorate PlayerController with PlaylistController?
         
     }

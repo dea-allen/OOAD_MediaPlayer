@@ -24,11 +24,11 @@ public class PlaylistController
     public void createPlaylist()
     {
         ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
-        //gui.openPlaylistPanel.setVisible(!gui.openPlaylistPanel.isVisible());
         String name = JOptionPane.showInputDialog(gui.frame, "Enter Plyalist Name:");
         File file = getFile();
         addToJson("Playlist", name);
-        addToJson(name, file.getPath());
+        addToJson(name, file.getPath());        
+        gui.playlistModel.addElement(name);
     }
     
     private File getFile()
