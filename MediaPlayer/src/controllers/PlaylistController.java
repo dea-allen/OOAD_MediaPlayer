@@ -12,7 +12,7 @@ import modules.*;
 
 public class PlaylistController 
 {
-    private static final String DATA_DIR = "/Users/Ernie/Desktop/OOAD/OOAD_MediaPlayer/MediaPlayer/src/data/";
+    private static final String DATA_DIR = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
     private static final String DATA_JSON = "playlists.json";
     
     public void showPlaylists()
@@ -29,6 +29,7 @@ public class PlaylistController
         File file = getFile();
         addToJson("Playlist", name);
         addToJson(name, file.getPath());
+        gui.playlists = generateCurrentList();
     }
     
     private File getFile()
@@ -73,7 +74,13 @@ public class PlaylistController
         catch (Exception ex) 
         {
             Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }    
+    }
+    
+    JList generateCurrentList()
+    {
+        DefaultListModel currentMediaModel = new DefaultListModel();
+        currentMediaModel.addElement("Now Playing");
+        return new JList(currentMediaModel);
     }
 }

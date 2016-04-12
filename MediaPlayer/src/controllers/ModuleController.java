@@ -14,7 +14,7 @@ import view.*;
 
 public class ModuleController 
 {
-    private static final String MODULE_DIR = "/Users/Ernie/Desktop/OOAD/OOAD_MediaPlayer/MediaPlayer/src/modules/";
+    private static final String MODULE_DIR = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/modules/";
     private static final String MODULES_JSON = "modules.json";
     
     public ModuleController() {};
