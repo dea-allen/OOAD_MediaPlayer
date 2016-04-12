@@ -12,9 +12,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     private JPanel showPlaylistPanel;
     private JButton showPlaylistButton;
     
-    public JPanel openPlaylistPanel;
-    public JList playlists;
-    
+    private JList playlists;
     private JPanel controlPlaylistPanel;
     private JScrollPane playlistScrollPane;
     private JButton createPlaylistButton;
@@ -25,7 +23,9 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     private JButton deleteMediaButton;
     private JList medias;
     
-            
+    public JPanel openPlaylistPanel;
+    public DefaultListModel playlistModel;
+    
     public ConcreteGuiPlaylistDecorator(GuiModel base) 
     {
         super(base);
@@ -70,14 +70,16 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         controlPlaylistPanel.add(addPlaylistButton);
         controlPlaylistPanel.add(createPlaylistButton);
         controlPlaylistPanel.add(deletePlaylistButton);
+        playlistModel = new DefaultListModel();
+        playlists = new JList(playlistModel);
+        playlistScrollPane = new JScrollPane(playlists);
         
+        openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
         openPlaylistPanel.add(controlPlaylistPanel, BorderLayout.NORTH);
     }
     public void setupSelectedPlaylistPanel()
     {
         selectedPlaylistPanel = new JPanel(new BorderLayout(1,1));
-        playlists = new JList();
-        playlistScrollPane = new JScrollPane(playlists);
-        openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
+        
     }
 }
