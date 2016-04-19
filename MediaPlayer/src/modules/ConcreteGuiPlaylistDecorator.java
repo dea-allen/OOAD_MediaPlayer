@@ -2,6 +2,9 @@ package modules;
 
 import controllers.ModuleController;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     public JList playlists;
     public JPanel openPlaylistPanel;
     public DefaultListModel playlistModel;
+    public DefaultListModel mediaModel;
     
     public ConcreteGuiPlaylistDecorator(GuiModel base) 
     {
@@ -79,7 +83,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         createPlaylistButton = new JButton("Create Playlist");
         createPlaylistButton.setActionCommand(CONTROLLER + ".createPlaylist");
         deletePlaylistButton = new JButton("X");
-        //deletePlaylistButton.setActionCommand(CONTROLLER + ".deletePlaylist");
+        deletePlaylistButton.setActionCommand(CONTROLLER + ".deletePlaylist");
         controlPlaylistPanel.add(addToPlaylistButton);
         controlPlaylistPanel.add(createPlaylistButton);
         controlPlaylistPanel.add(deletePlaylistButton);
@@ -87,9 +91,15 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         playlistModel = new DefaultListModel();
         playlistModel = populateList();
         playlists = new JList(playlistModel);
+        playlists.addMouseListener(mouseListener);
         playlistScrollPane = new JScrollPane(playlists);
         
+        mediaModel = new DefaultListModel();
+        medias = new JList();
+        selectPlaylistScrollPane = new JScrollPane(medias);
+        
         openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
+        openPlaylistPanel.add(selectPlaylistScrollPane, BorderLayout.EAST);
         openPlaylistPanel.add(controlPlaylistPanel, BorderLayout.NORTH);
     }
     public void setupSelectedPlaylistPanel()
@@ -118,4 +128,16 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         }
         return playlists;
     }
+    
+    MouseListener mouseListener = new MouseAdapter() 
+    {
+        public void mouseClicked(MouseEvent e) 
+        {
+            if (e.getClickCount() == 2) 
+            {
+                String selectedItem = (String) playlists.getSelectedValue();
+                mediaModel.addElement("HAHAHA");
+            }
+        }
+    };
 }
