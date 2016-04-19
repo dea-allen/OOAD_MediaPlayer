@@ -2,16 +2,27 @@ package controllers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
+import javax.json.stream.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import view.*;
 import modules.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 
 public class PlaylistController 
@@ -45,8 +56,20 @@ public class PlaylistController
         {
             Logger.getLogger(PlaylistController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void deletePlaylist()
+    {
+        ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
+        Object name = gui.playlists.getSelectedValue();
         
-        //addMedia();
+        //Delete json file
+        File toDelete = new File(JSON_PATH + name + JSON); 
+        toDelete.delete();
+        //Delete from GUI
+        gui.playlistModel.removeElement(name);
+        //Delete from json list
+        removeFromJson(DATA_DIR + DATA_JSON, name.toString());
     }
     
     public void addToPlaylist()
@@ -101,6 +124,43 @@ public class PlaylistController
             file.writeBytes("," + jsonStr + "]");
             file.close();
         } 
+        catch (Exception ex) 
+        {
+            Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    }
+    
+    private void removeFromJson(String path, String playlistToRemove)
+    {
+        try
+        {
+            JSONParser parser = new JSONParser();
+            Object obj = parser.parse(new FileReader(path));
+            JSONArray arr = (JSONArray)obj;
+
+            for (int i=0; i<arr.size(); i++)
+            {
+                JSONObject item = (JSONObject) arr.get(i);
+                String remove = item.values().toString();
+                if (playlistToRemove.equals(remove.substring(1,remove.length()-1)))
+                {
+                    arr.remove(item);
+                }
+            }
+            
+            PrintWriter writer = new PrintWriter(path);
+            writer.println("[");
+            writer.println("{\"Playlist\":\"DefaultPlayList\"}");
+            writer.println("]");
+            writer.close();
+            for (int i=1; i<arr.size(); i++)
+            {
+                JSONObject item = (JSONObject) arr.get(i);
+                String key = item.keySet().toString();
+                String val = item.values().toString();
+                addToJson(key.substring(1,key.length()-1), val.substring(1,val.length()-1), path);
+            }
+        }
         catch (Exception ex) 
         {
             Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
