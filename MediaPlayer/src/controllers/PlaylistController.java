@@ -70,6 +70,7 @@ public class PlaylistController
         gui.playlistModel.removeElement(name);
         //Delete from json list
         removeFromJson(DATA_DIR + DATA_JSON, name.toString());
+        gui.mediaModel.removeAllElements();
     }
     
     public void addToPlaylist()
