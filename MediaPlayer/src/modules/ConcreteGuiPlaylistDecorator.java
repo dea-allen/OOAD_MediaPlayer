@@ -19,7 +19,7 @@ import models.*;
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
     private static final String CONTROLLER = "PlaylistController";
-    private static final String MODULE_DIR = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
+    private static final String MODULE_DIR = "./src/data/";
     private static final String MODULES_JSON = "playlists.json";
     
     private JPanel playlistPanel;
