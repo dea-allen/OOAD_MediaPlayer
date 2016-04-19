@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +17,9 @@ import javax.json.JsonArray;
 import javax.json.JsonReader;
 import javax.swing.*;
 import models.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
@@ -95,7 +100,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         playlistScrollPane = new JScrollPane(playlists);
         
         mediaModel = new DefaultListModel();
-        medias = new JList();
+        medias = new JList(mediaModel);
         selectPlaylistScrollPane = new JScrollPane(medias);
         
         openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
@@ -136,7 +141,29 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
             if (e.getClickCount() == 2) 
             {
                 String selectedItem = (String) playlists.getSelectedValue();
-                mediaModel.addElement("HAHAHA");
+                /*
+                try
+                {
+                    JSONParser parser = new JSONParser();
+                    Object obj = parser.parse(new FileReader(path));
+                    JSONArray arr = (JSONArray)obj;
+
+                    for (int i=0; i<arr.size(); i++)
+                    {
+                        JSONObject item = (JSONObject) arr.get(i);
+                        String remove = item.values().toString();
+                        if (playlistToRemove.equals(remove.substring(1,remove.length()-1)))
+                        {
+                            arr.remove(item);
+                        }
+                    }
+                }
+                catch (Exception ex) 
+                {
+                    Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                */
+                //mediaModel.addElement("HAHAHA");
             }
         }
     };
