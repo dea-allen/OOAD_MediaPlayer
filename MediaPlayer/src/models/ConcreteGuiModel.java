@@ -1,13 +1,30 @@
 package models;
 
+import controllers.PlayerController;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class ConcreteGuiModel extends GuiModel 
+import uk.co.caprica.vlcj.component.AudioMediaPlayerComponent;
+import uk.co.caprica.vlcj.discovery.NativeDiscovery;
+
+import view.GuiView;
+
+public class ConcreteGuiModel extends GuiModel
 {
     private static final String PLAYER_CONTROLLER = "PlayerController";
     private static final String MODULE_CONTROLLER = "ModuleController";
+    
+    
+    private AudioMediaPlayerComponent audioMediaPlayerComponent = null;
+    private boolean mousePressedPlaying = false;
+    private UpdateWorker worker;
     
     public ConcreteGuiModel() 
     {
@@ -35,7 +52,6 @@ public class ConcreteGuiModel extends GuiModel
         moduleMenu = new JMenu("Modules");
         addModuleMenuItem = new JMenuItem("Add Module");
         addModuleMenuItem.setActionCommand(MODULE_CONTROLLER + ".addModule");
-        
         moduleMenu.add(addModuleMenuItem);
         menubar.add(moduleMenu); 
     }
@@ -52,21 +68,104 @@ public class ConcreteGuiModel extends GuiModel
         controlButtonPanel = new JPanel(new GridLayout(1,2));
         playButton = new JButton("Play");
         stopButton = new JButton("Stop");
-        playButton.setActionCommand(PLAYER_CONTROLLER + ".play");
-        stopButton.setActionCommand(PLAYER_CONTROLLER + ".stop"); 
-        controlButtonPanel.add(playButton);
-        controlButtonPanel.add(stopButton);
         controlSliderPanel = new JPanel(new GridLayout(1,1));
         seekSlider = new JSlider();
-        controlSliderPanel.add(seekSlider);
-        controlPanel.add(controlButtonPanel);
-        controlPanel.add(controlSliderPanel);
         
+        controlButtonPanel.add(playButton);
+        controlButtonPanel.add(stopButton);
+        controlSliderPanel.add(seekSlider);
+        
+        setDefaultSliderPosition();
+        
+        playButton.addActionListener((ActionEvent e) -> {
+            if (audioMediaPlayerComponent == null) {
+                new NativeDiscovery().discover();
+                audioMediaPlayerComponent = new AudioMediaPlayerComponent();
+                audioMediaPlayerComponent.getMediaPlayer().playMedia("./mediaSamples/allegro.mp3");
+                audioMediaPlayerComponent.getMediaPlayer().parseMedia();
+                worker = new UpdateWorker(audioMediaPlayerComponent.getMediaPlayer().getLength(), this, 1);
+                worker.execute();                
+            }            
+        });
+        
+        stopButton.addActionListener((ActionEvent e) -> {
+            if (audioMediaPlayerComponent.getMediaPlayer().isPlaying() == true) {
+                audioMediaPlayerComponent.getMediaPlayer().stop();
+                audioMediaPlayerComponent.getMediaPlayer().release();
+                audioMediaPlayerComponent = null;
+                setDefaultSliderPosition();
+                worker.cancel(true);
+            }
+        });
+        
+        seekSlider.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if(audioMediaPlayerComponent.getMediaPlayer().isPlaying()) {
+                    mousePressedPlaying = true;
+                    audioMediaPlayerComponent.getMediaPlayer().pause();
+                }
+                else {
+                    mousePressedPlaying = false;
+                }
+                setSliderBasedPosition();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                setSliderBasedPosition();
+                updateUIState();
+            }
+        });
+        
+        controlPanel.add(controlButtonPanel);
+        controlPanel.add(controlSliderPanel);   
+    }
+    
+    private void setSliderBasedPosition() {
+        if(!audioMediaPlayerComponent.getMediaPlayer().isSeekable()) {
+            return;
+        }
+        float positionValue = seekSlider.getValue() / 1000.0f;
+        if(positionValue > 0.99f) {
+            positionValue = 0.99f;
+        }
+        audioMediaPlayerComponent.getMediaPlayer().setPosition(positionValue);
+    }
+    
+    
+    private void updateUIState() {
+        if(!audioMediaPlayerComponent.getMediaPlayer().isPlaying()) {
+            audioMediaPlayerComponent.getMediaPlayer().play();
+            if(!mousePressedPlaying) {
+                try {
+                    Thread.sleep(500);
+                }
+                catch(InterruptedException e) { }
+                audioMediaPlayerComponent.getMediaPlayer().pause();
+            }
+        }
+        int position = (int)(audioMediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
+        setDefaultSliderPosition(position);
+        worker.cancel(true);
+        worker = new UpdateWorker(audioMediaPlayerComponent.getMediaPlayer().getLength(), this, position);
+        worker.execute();
+    }
+    
+    private void setDefaultSliderPosition(int position) {
+        seekSlider.setValue(position);
+    }
+    
+    private void setDefaultSliderPosition() {
+        seekSlider.setMinimum(0);
+        seekSlider.setMaximum(1000);
+        seekSlider.setValue(0);
     }
     
     JList generateCurrentList()
     {
         DefaultListModel currentMediaModel = new DefaultListModel();
+        
         currentMediaModel.addElement("Now Playing");
         currentMediaModel.addElement("Track: ");
         currentMediaModel.addElement("Artist: ");
@@ -90,4 +189,29 @@ public class ConcreteGuiModel extends GuiModel
         
         return this;
     }
+}
+
+class UpdateWorker extends SwingWorker<Void, Integer> {
+
+    private int duration;
+    private ConcreteGuiModel cgi;
+    private int i;
+
+    public UpdateWorker(long duration, ConcreteGuiModel cgi, int i) {
+        this.duration = (int) duration;
+        this.cgi = cgi;
+        this.i = i;
+    }
+
+    @Override
+    protected Void doInBackground() throws Exception {
+        for (int j = this.i; j <= duration; j++) {
+            Thread.sleep(1000);
+            cgi.seekSlider.setValue((j/1000)+(j));
+            publish(j);
+        }
+        return null;
+    }
+
+    protected void process(int i) { }
 }
