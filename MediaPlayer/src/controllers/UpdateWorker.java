@@ -8,6 +8,7 @@ package controllers;
 import java.util.List;
 import javax.swing.SwingWorker;
 import models.*;
+import view.GuiView;
 
 
 public class UpdateWorker extends SwingWorker<Void, Integer> 
@@ -17,19 +18,20 @@ public class UpdateWorker extends SwingWorker<Void, Integer>
     private GuiModel cgi;
     private int i;
 
-    public UpdateWorker(long duration, GuiModel cgi, int i) 
+    public UpdateWorker(long duration, int i) 
     {
         this.duration = (int) duration;
-        this.cgi = cgi;
         this.i = i;
     }
 
     @Override
     protected Void doInBackground() throws Exception 
     {
+        GuiModel gui = GuiView.getView(null).getGuiModel();
+
         for (int j = this.i; j <= duration; j++) {
             Thread.sleep(1000);
-            cgi.seekSlider.setValue((j/1000)+(j));
+            gui.seekSlider.setValue((j/1000)+(j));
             publish(j);
         }
         return null;

@@ -53,7 +53,7 @@ public class PlayerController extends Controller
         int position = (int)(gui.audioMediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
         setDefaultSliderPosition(position, gui);
         gui.worker.cancel(true);
-        gui.worker = new UpdateWorker(gui.audioMediaPlayerComponent.getMediaPlayer().getLength(), gui, position);
+        gui.worker = new UpdateWorker(gui.audioMediaPlayerComponent.getMediaPlayer().getLength(), position);
         gui.worker.execute();
     }
     private void setDefaultSliderPosition(int position, GuiModel gui) 
@@ -69,21 +69,19 @@ public class PlayerController extends Controller
     public void play()
     {
         GuiModel gui = GuiView.getView(null).getGuiModel();
+        
         if (gui.audioMediaPlayerComponent == null) 
         {
             new NativeDiscovery().discover();
             gui.audioMediaPlayerComponent = new AudioMediaPlayerComponent();        
         }
-<<<<<<< Updated upstream
         gui.audioMediaPlayerComponent.getMediaPlayer().playMedia("../../../../../../" + gui.selectedMedia);
-=======
-        gui.audioMediaPlayerComponent.getMediaPlayer().playMedia(gui.selectedMedia);
->>>>>>> Stashed changes
+
         if (gui.worker != null)
         {
             gui.worker.cancel(true);
         }
-        gui.worker = new UpdateWorker(gui.audioMediaPlayerComponent.getMediaPlayer().getLength(), gui, 1);
+        gui.worker = new UpdateWorker(gui.audioMediaPlayerComponent.getMediaPlayer().getLength(), 1);
         gui.worker.execute();  
         updateCurrentMediaList(gui);
     }
