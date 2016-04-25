@@ -7,9 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -17,13 +14,10 @@ import javax.json.JsonArray;
 import javax.json.JsonReader;
 import javax.swing.*;
 import models.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
-    private static final String JSON_PATH = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
+    private static final String JSON_PATH = "./src/data/";
     private static final String JSON = ".json";
     
     private static final String CONTROLLER = "PlaylistController";
@@ -53,6 +47,11 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     {
         super(base);
         frame = base.frame;
+        audioMediaPlayerComponent = base.audioMediaPlayerComponent;
+        worker = base.worker;
+        seekSlider = base.seekSlider;
+        currentMediaModel = base.currentMediaModel;
+        selectedMedia = base.selectedMedia;
     }
     
     @Override
@@ -104,6 +103,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         
         mediaModel = new DefaultListModel();
         medias = new JList(mediaModel);
+        medias.addMouseListener(selectMediaListener);
         selectPlaylistScrollPane = new JScrollPane(medias);
         
         openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
@@ -145,33 +145,30 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
             {
                 mediaModel.removeAllElements();
                 String selectedItem = (String) playlists.getSelectedValue();
-                
+                File file = new File(JSON_PATH + selectedItem + JSON);
+                JsonReader reader;
                 try
                 {
-                    JSONParser parser = new JSONParser();
-                    FileReader f = new FileReader(JSON_PATH + selectedItem + JSON);
-                    Object obj = parser.parse(f);
-                    JSONArray arr = (JSONArray)obj;
-                    f.close();
-                    
-                    for (int i=0; i<arr.size(); i++)
+                    reader = Json.createReader(new FileInputStream(file));
+                    JsonArray modules = reader.readArray();
+                    reader.close();
+                    for(int i = 0; i < modules.size(); i++)
                     {
-                        JSONObject item = (JSONObject) arr.get(i);
-                        String mediaFile = item.toString();
-                        //char quote = '"';
-                        int st = mediaFile.indexOf('\"', 0);
-                        int en = mediaFile.indexOf('\"', st+1);
-                        
-                        mediaModel.addElement(mediaFile.substring(st+1, en));
+                        mediaModel.addElement(modules.getJsonObject(i).getString(selectedItem));
                     }
                 }
                 catch (Exception ex) 
                 {
                     Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                //mediaModel.addElement("HAHAHA");
             }
+        }
+    };
+    
+    MouseListener selectMediaListener = new MouseAdapter() {
+        public void mouseClicked(MouseEvent e)
+        {
+            selectedMedia = medias.getSelectedValue().toString();
         }
     };
 }

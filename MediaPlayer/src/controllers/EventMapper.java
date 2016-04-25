@@ -18,11 +18,13 @@ public class EventMapper implements ActionListener
         for (Component c: items)
         {
             //TODO: refactor smelly
+            // Add button action listeners
             if (c.getClass() == JButton.class)
             {
                 JButton b = (JButton) c;
                 b.addActionListener(this);
             }
+            // Add menu item action listeners
             if (c.getClass() == JMenu.class)
             {
                 JMenu m = (JMenu) c;
@@ -30,6 +32,21 @@ public class EventMapper implements ActionListener
                 {
                     m.getItem(i).addActionListener(this);
                 }
+            }
+            // Add slider mouse listener
+            if (c.getClass() == JSlider.class)
+            {
+                JSlider s = (JSlider) c;
+                s.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        new PlayerController().seekMousePressed();
+                    }
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        new PlayerController().seekMouseReleased();
+                    }
+                });
             }
         }
     }
@@ -65,5 +82,5 @@ public class EventMapper implements ActionListener
         }
         
     }
-  
+    
 }

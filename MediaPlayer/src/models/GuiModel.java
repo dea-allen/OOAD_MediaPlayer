@@ -1,6 +1,8 @@
 package models;
 
+import controllers.UpdateWorker;
 import javax.swing.*;
+import uk.co.caprica.vlcj.component.AudioMediaPlayerComponent;
 
 public abstract class GuiModel 
 {    
@@ -16,6 +18,7 @@ public abstract class GuiModel
     public JPanel currentMediaPanel;
     public JScrollPane currentMediaScrollPane;
     public JList currentMedia;
+    public DefaultListModel currentMediaModel;
     
     public JPanel controlPanel;
     public JPanel controlButtonPanel;
@@ -23,6 +26,12 @@ public abstract class GuiModel
     public JButton stopButton;
     public JPanel controlSliderPanel;
     public JSlider seekSlider;
+    
+    public AudioMediaPlayerComponent audioMediaPlayerComponent;
+    public UpdateWorker worker;
+    public boolean mousePressedPlaying;
+
+    public String selectedMedia;
  
     public abstract GuiModel drawGui();
 }

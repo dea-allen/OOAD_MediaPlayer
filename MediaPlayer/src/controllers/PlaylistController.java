@@ -4,19 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.json.Json;
-import javax.json.stream.*;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import view.*;
 import modules.*;
 
@@ -25,10 +16,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 
-public class PlaylistController 
+public class PlaylistController extends Controller
 {
-    private static final String DATA_DIR = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
-    private static final String JSON_PATH = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
+    private static final String DATA_DIR = "./src/data/";
     private static final String DATA_JSON = "playlists.json";
     private static final String JSON = ".json";
     
@@ -42,13 +32,13 @@ public class PlaylistController
     {
         ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
         String name = JOptionPane.showInputDialog(gui.frame, "Enter Plyalist Name:");
-        addToJson("Playlist", name);
+        addToJson("Playlist", name, DATA_DIR + DATA_JSON);
         gui.playlistModel.addElement(name);
         
         try 
         {
-            PrintWriter writer = new PrintWriter(JSON_PATH + name + JSON, "UTF-8");
-            writer.println("[");
+            PrintWriter writer = new PrintWriter(DATA_DIR + name + JSON, "UTF-8");
+            writer.println("[{\""+ name + "\":\"\"}");
             writer.println("]");
             writer.close();
         }
@@ -64,7 +54,7 @@ public class PlaylistController
         Object name = gui.playlists.getSelectedValue();
         
         //Delete json file
-        File toDelete = new File(JSON_PATH + name + JSON); 
+        File toDelete = new File(DATA_DIR + name + JSON); 
         toDelete.delete();
         //Delete from GUI
         gui.playlistModel.removeElement(name);
@@ -79,58 +69,9 @@ public class PlaylistController
         Object name = gui.playlists.getSelectedValue();
         
         File file = getFile();
-        addToJson(file.getPath(), name.toString(), JSON_PATH + name + JSON);
+        addToJson(name.toString(), file.getPath(), DATA_DIR + name + JSON);
     }
-    
-    private File getFile()
-    {
-        File file = null;
-        JFileChooser chooser = new JFileChooser();
-        int returnVal = chooser.showOpenDialog(GuiView.getView(null).getGuiModel().frame);
-        if(returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            file = chooser.getSelectedFile();
-        }
-        return file;
-    }
-    
-    private void addToJson(String key, String value)
-    {
-        String filename = DATA_DIR + DATA_JSON;
-        addToJson(key, value, filename);
-    }
-    
-    private void addToJson(String key, String value, String filename)
-    {
-        RandomAccessFile file = null;
-        try 
-        {
-            String jsonStr = Json.createObjectBuilder()
-                    .add(key, value)
-                    .build()
-                    .toString();
-            // adapted from: http://stackoverflow.com/questions/26250009/append-json-element-to-json-array-in-file-using-java
-            file = new RandomAccessFile(filename, "rw");
-            long pos = file.length();
-            while (file.length() > 0)
-            {
-                pos--;
-                file.seek(pos);
-                if (file.readByte() == ']')
-                {
-                    file.seek(pos);
-                    break;
-                }
-            }
-            file.writeBytes("," + jsonStr + "]");
-            file.close();
-        } 
-        catch (Exception ex) 
-        {
-            Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
-        }    
-    }
-    
+        
     private void removeFromJson(String path, String playlistToRemove)
     {
         try
@@ -166,12 +107,5 @@ public class PlaylistController
         {
             Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
         }    
-    }
-    
-    JList generateCurrentList()
-    {
-        DefaultListModel currentMediaModel = new DefaultListModel();
-        currentMediaModel.addElement("Now Playing");
-        return new JList(currentMediaModel);
     }
 }
