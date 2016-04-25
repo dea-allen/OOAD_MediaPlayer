@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import java.util.List;
 import javax.swing.SwingWorker;
 import models.*;
 
@@ -33,6 +34,6 @@ public class UpdateWorker extends SwingWorker<Void, Integer>
         }
         return null;
     }
-
-    protected void process(int i) { }
+    @Override
+    protected void process(List<Integer> i) { }
 }

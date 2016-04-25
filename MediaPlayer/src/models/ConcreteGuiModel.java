@@ -1,16 +1,7 @@
 package models;
 
-import controllers.UpdateWorker;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import uk.co.caprica.vlcj.player.TrackDescription;
 
 
 public class ConcreteGuiModel extends GuiModel
@@ -24,6 +15,7 @@ public class ConcreteGuiModel extends GuiModel
         setupMenu();
         setupCurrentMediaPanel();
         setupControlPanel();
+        mousePressedPlaying = false;
     }
     
     void setupFrame()

@@ -14,6 +14,7 @@ import javax.json.JsonArray;
 import javax.json.JsonReader;
 import javax.swing.*;
 import models.*;
+import view.GuiView;
 
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
@@ -50,9 +51,11 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         audioMediaPlayerComponent = base.audioMediaPlayerComponent;
         worker = base.worker;
         seekSlider = base.seekSlider;
+        mousePressedPlaying = base.mousePressedPlaying;
         currentMediaModel = base.currentMediaModel;
         selectedMedia = base.selectedMedia;
     }
+    
     
     @Override
     public GuiModel drawGui()
@@ -164,11 +167,12 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
             }
         }
     };
-    
+    //TODO: REFACTOR - shouldn't get gui here
     MouseListener selectMediaListener = new MouseAdapter() {
         public void mouseClicked(MouseEvent e)
         {
-            selectedMedia = medias.getSelectedValue().toString();
+            GuiModel gui = GuiView.getView(null).getGuiModel();
+            gui.selectedMedia = medias.getSelectedValue().toString();
         }
     };
 }

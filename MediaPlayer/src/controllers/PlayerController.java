@@ -2,7 +2,6 @@ package controllers;
 
 import java.awt.event.WindowEvent;
 import java.io.File;
-import javax.swing.JFileChooser;
 import models.*;
 import view.GuiView;
 
@@ -75,7 +74,7 @@ public class PlayerController extends Controller
             new NativeDiscovery().discover();
             gui.audioMediaPlayerComponent = new AudioMediaPlayerComponent();        
         }
-        gui.audioMediaPlayerComponent.getMediaPlayer().playMedia("../../../../../../"+gui.selectedMedia);
+        gui.audioMediaPlayerComponent.getMediaPlayer().playMedia("../../../../../../" + gui.selectedMedia);
         if (gui.worker != null)
         {
             gui.worker.cancel(true);

@@ -22,7 +22,6 @@ public class GuiView
            _view = new GuiView(model);
         return _view;
     }
-    
     public GuiModel getGuiModel()
     {
         return _gui;

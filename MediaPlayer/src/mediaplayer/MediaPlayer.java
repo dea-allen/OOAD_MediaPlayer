@@ -1,10 +1,8 @@
 package mediaplayer;
 
-import com.sun.jna.NativeLibrary;
 import models.GuiModel;
 import models.ConcreteGuiModel;
 import controllers.ModuleController;
-import java.io.File;
 import view.*;
 import modules.*;
 import java.lang.reflect.Constructor;
@@ -12,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
 
 public class MediaPlayer 
 {

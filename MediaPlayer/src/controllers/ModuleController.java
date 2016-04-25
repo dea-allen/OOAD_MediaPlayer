@@ -41,7 +41,7 @@ public class ModuleController extends Controller
     {
         File file = getFile();
         addToDirectory(file);
-        addToJson("Modules", file.getName(), MODULE_DIR + MODULES_JSON);
+        addToJson("Module", file.getName(), MODULE_DIR + MODULES_JSON);
     }
 
     private void addToDirectory(File file)
