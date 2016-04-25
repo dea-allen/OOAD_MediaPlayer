@@ -74,7 +74,11 @@ public class PlayerController extends Controller
             new NativeDiscovery().discover();
             gui.audioMediaPlayerComponent = new AudioMediaPlayerComponent();        
         }
+<<<<<<< Updated upstream
         gui.audioMediaPlayerComponent.getMediaPlayer().playMedia("../../../../../../" + gui.selectedMedia);
+=======
+        gui.audioMediaPlayerComponent.getMediaPlayer().playMedia(gui.selectedMedia);
+>>>>>>> Stashed changes
         if (gui.worker != null)
         {
             gui.worker.cancel(true);

@@ -38,6 +38,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     private JScrollPane selectPlaylistScrollPane;
     private JButton deleteMediaButton;
     private JList medias;
+    private JButton deleteMediaButton;
     
     public JList playlists;
     public JPanel openPlaylistPanel;
@@ -104,6 +105,7 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         playlists.addMouseListener(mouseListener);
         playlistScrollPane = new JScrollPane(playlists);
         
+        deleteMediaButton = new JButton("-");
         mediaModel = new DefaultListModel();
         medias = new JList(mediaModel);
         medias.addMouseListener(selectMediaListener);
