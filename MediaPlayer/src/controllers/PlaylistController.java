@@ -26,7 +26,17 @@ public class PlaylistController extends Controller
     public void showPlaylists()
     {
         ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
-        gui.openPlaylistPanel.setVisible(!gui.openPlaylistPanel.isVisible());
+        gui.openPanel.setVisible(!gui.openPanel.isVisible());
+    }
+    
+    public void showMedia()
+    {
+        ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
+        gui.selectedPlaylistPanel.setVisible(!gui.selectedPlaylistPanel.isVisible());
+        if (gui.hideMediaPanel.getText() == ">>")
+            gui.hideMediaPanel.setText("<<");
+        else
+            gui.hideMediaPanel.setText(">>");
     }
     
     public void createPlaylist()
@@ -62,6 +72,12 @@ public class PlaylistController extends Controller
         //Delete from json list
         removeFromJson(DATA_DIR + DATA_JSON, name.toString());
         gui.mediaModel.removeAllElements();
+    }
+    
+    public void deleteMedia()
+    {
+        ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
+        Object name = gui.medias.getSelectedValue();
     }
     
     public void addToPlaylist()

@@ -34,14 +34,15 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
     private JButton createPlaylistButton;
     private JButton deletePlaylistButton;
     private JButton addToPlaylistButton;
-    private JPanel selectedPlaylistPanel;
     private JScrollPane selectPlaylistScrollPane;
     private JButton deleteMediaButton;
-    private JList medias;
-    private JButton deleteMediaButton;
     
+    public JList medias;
+    public JButton hideMediaPanel;
+    public JPanel selectedPlaylistPanel;
     public JList playlists;
     public JPanel openPlaylistPanel;
+    public JPanel openPanel;
     public DefaultListModel playlistModel;
     public DefaultListModel mediaModel;
     
@@ -64,15 +65,14 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         super.drawGui();
         
         setupShowPlaylistPanel();
-        setupOpenPlaylistPanel();
-        setupSelectedPlaylistPanel();
+        setupOpenPanel();
         
         playlistPanel.add(showPlaylistPanel, BorderLayout.WEST);
-        playlistPanel.add(openPlaylistPanel, BorderLayout.CENTER);
-        playlistPanel.add(selectedPlaylistPanel, BorderLayout.EAST);
-
+        playlistPanel.add(openPanel, BorderLayout.CENTER);
+        playlistPanel.setSize(frame.getWidth()/2, frame.getHeight());
         frame.add(playlistPanel, BorderLayout.EAST);
         frame.setSize(800, 300);   
+        frame.pack();
         frame.setVisible(true);
         
         return this;
@@ -84,6 +84,17 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         showPlaylistButton = new JButton("Show");
         showPlaylistButton.setActionCommand(CONTROLLER + ".showPlaylists");
         showPlaylistPanel.add(showPlaylistButton);
+    }
+    private void setupOpenPanel()
+    {
+        setupSelectedPlaylistPanel();
+        hideMediaPanel = new JButton(">>");
+        hideMediaPanel.setActionCommand(CONTROLLER + ".showMedia");
+        setupOpenPlaylistPanel();
+        openPanel = new JPanel(new BorderLayout());
+        openPanel.add(selectedPlaylistPanel, BorderLayout.EAST);
+        openPanel.add(hideMediaPanel, BorderLayout.CENTER);
+        openPanel.add(openPlaylistPanel, BorderLayout.WEST);
     }
     public void setupOpenPlaylistPanel()
     {
@@ -104,20 +115,23 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         playlists = new JList(playlistModel);
         playlists.addMouseListener(mouseListener);
         playlistScrollPane = new JScrollPane(playlists);
-        
+      
+        openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
+        openPlaylistPanel.add(controlPlaylistPanel, BorderLayout.NORTH);        
+    }
+
+    private void setupSelectedPlaylistPanel()
+    {
         deleteMediaButton = new JButton("-");
+        deleteMediaButton.setActionCommand(CONTROLLER + ".deleteMedia");
         mediaModel = new DefaultListModel();
         medias = new JList(mediaModel);
         medias.addMouseListener(selectMediaListener);
         selectPlaylistScrollPane = new JScrollPane(medias);
         
-        openPlaylistPanel.add(playlistScrollPane, BorderLayout.CENTER);
-        openPlaylistPanel.add(selectPlaylistScrollPane, BorderLayout.EAST);
-        openPlaylistPanel.add(controlPlaylistPanel, BorderLayout.NORTH);
-    }
-    public void setupSelectedPlaylistPanel()
-    {
-        selectedPlaylistPanel = new JPanel(new BorderLayout(1,1));   
+        selectedPlaylistPanel = new JPanel(new BorderLayout());
+        selectedPlaylistPanel.add(selectPlaylistScrollPane, BorderLayout.CENTER);
+        selectedPlaylistPanel.add(deleteMediaButton, BorderLayout.EAST);
     }
     private static DefaultListModel populateList()
     {
