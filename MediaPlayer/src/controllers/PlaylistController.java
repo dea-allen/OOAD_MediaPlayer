@@ -70,14 +70,20 @@ public class PlaylistController extends Controller
         //Delete from GUI
         gui.playlistModel.removeElement(name);
         //Delete from json list
-        removeFromJson(DATA_DIR + DATA_JSON, name.toString());
+        removeFromJson(DATA_DIR + DATA_JSON, name.toString(), "playlist");
         gui.mediaModel.removeAllElements();
     }
     
     public void deleteMedia()
     {
         ConcreteGuiPlaylistDecorator gui = (ConcreteGuiPlaylistDecorator) GuiView.getView(null).getGuiModel();
-        Object name = gui.medias.getSelectedValue();
+        Object playlistName = gui.playlists.getSelectedValue();
+        Object mediaName = gui.medias.getSelectedValue();
+        
+        //Delete from GUI
+        gui.mediaModel.removeElement(mediaName);
+        //Delete from json list
+        removeFromJson(DATA_DIR + playlistName + JSON, mediaName.toString(), "media");
     }
     
     public void addToPlaylist()
@@ -89,7 +95,7 @@ public class PlaylistController extends Controller
         addToJson(name.toString(), file.getPath(), DATA_DIR + name + JSON);
     }
         
-    private void removeFromJson(String path, String playlistToRemove)
+    private void removeFromJson(String path, String playlistToRemove, String what)
     {
         try
         {
@@ -107,11 +113,23 @@ public class PlaylistController extends Controller
                 }
             }
             
-            PrintWriter writer = new PrintWriter(path);
-            writer.println("[");
-            writer.println("{\"Playlist\":\"DefaultPlayList\"}");
-            writer.println("]");
-            writer.close();
+            if ("playlist".equals(what))
+            {
+                PrintWriter writer = new PrintWriter(path);
+                writer.println("[");
+                writer.println("{\"Playlist\":\"DefaultPlayList\"}");
+                writer.println("]");
+                writer.close();
+            }
+            else if ("media".equals(what))
+            {
+                PrintWriter writer = new PrintWriter(path);
+                writer.println("[");
+                writer.println("{\"abc\":\"\"}");
+                writer.println("]");
+                writer.close();
+            }
+        
             for (int i=1; i<arr.size(); i++)
             {
                 JSONObject item = (JSONObject) arr.get(i);
