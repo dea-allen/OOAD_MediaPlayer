@@ -23,6 +23,9 @@ import org.json.simple.parser.JSONParser;
 
 public class ConcreteGuiPlaylistDecorator extends GuiDecorator 
 {
+    private static final String JSON_PATH = "/Users/SeshaSailendra/Documents/GitHub/OOAD_MediaPlayer/MediaPlayer/src/data/";
+    private static final String JSON = ".json";
+    
     private static final String CONTROLLER = "PlaylistController";
     private static final String MODULE_DIR = "./src/data/";
     private static final String MODULES_JSON = "playlists.json";
@@ -140,29 +143,33 @@ public class ConcreteGuiPlaylistDecorator extends GuiDecorator
         {
             if (e.getClickCount() == 2) 
             {
+                mediaModel.removeAllElements();
                 String selectedItem = (String) playlists.getSelectedValue();
-                /*
+                
                 try
                 {
                     JSONParser parser = new JSONParser();
-                    Object obj = parser.parse(new FileReader(path));
+                    FileReader f = new FileReader(JSON_PATH + selectedItem + JSON);
+                    Object obj = parser.parse(f);
                     JSONArray arr = (JSONArray)obj;
-
+                    f.close();
+                    
                     for (int i=0; i<arr.size(); i++)
                     {
                         JSONObject item = (JSONObject) arr.get(i);
-                        String remove = item.values().toString();
-                        if (playlistToRemove.equals(remove.substring(1,remove.length()-1)))
-                        {
-                            arr.remove(item);
-                        }
+                        String mediaFile = item.toString();
+                        //char quote = '"';
+                        int st = mediaFile.indexOf('\"', 0);
+                        int en = mediaFile.indexOf('\"', st+1);
+                        
+                        mediaModel.addElement(mediaFile.substring(st+1, en));
                     }
                 }
                 catch (Exception ex) 
                 {
                     Logger.getLogger(ModuleController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                */
+                
                 //mediaModel.addElement("HAHAHA");
             }
         }
