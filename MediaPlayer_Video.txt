@@ -1,4 +1,4 @@
-Full Demo:
+Full Demo: http://screencast.com/t/8vtrrYFxkE
 
 Add Module Demo: http://screencast.com/t/es6ZmEjvq 
 
