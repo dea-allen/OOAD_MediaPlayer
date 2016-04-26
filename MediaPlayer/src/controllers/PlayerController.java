@@ -2,8 +2,6 @@ package controllers;
 
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import models.*;
 import view.GuiView;
 
