@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import static java.time.Clock.system;
 import java.util.List;
 import javax.swing.SwingWorker;
 import models.*;
@@ -15,27 +16,28 @@ public class UpdateWorker extends SwingWorker<Void, Integer>
 {
 
     private int duration;
-    private GuiModel cgi;
-    private int i;
+    private float position;
 
     public UpdateWorker(long duration, int i) 
     {
-        this.duration = (int) duration;
-        this.i = i;
+        GuiModel gui = GuiView.getView(null).getGuiModel();
+
+        this.duration = (int) gui.audioMediaPlayerComponent.getMediaPlayer().getLength();
+        gui.seekSlider.setMinimum(0);
+        gui.seekSlider.setMaximum(this.duration);
     }
 
     @Override
     protected Void doInBackground() throws Exception 
     {
-        GuiModel gui = GuiView.getView(null).getGuiModel();
-
-        for (int j = this.i; j <= duration; j++) {
+        while(position < .99)
+        {
+            GuiModel gui = GuiView.getView(null).getGuiModel();
+            position = gui.audioMediaPlayerComponent.getMediaPlayer().getPosition();
+            duration = (int) gui.audioMediaPlayerComponent.getMediaPlayer().getLength();
             Thread.sleep(1000);
-            gui.seekSlider.setValue((j/1000)+(j));
-            publish(j);
+            GuiView.getView(null).getGuiModel().seekSlider.setValue((int)(position*duration));
         }
         return null;
     }
-    @Override
-    protected void process(List<Integer> i) { }
 }

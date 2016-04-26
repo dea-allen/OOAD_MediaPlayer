@@ -2,6 +2,8 @@ package controllers;
 
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import models.*;
 import view.GuiView;
 
@@ -14,6 +16,7 @@ public class PlayerController extends Controller
 
     private void updateCurrentMediaList(GuiModel gui)
     {
+        gui.audioMediaPlayerComponent.getMediaPlayer().parseMedia();
         MediaMeta meta = gui.audioMediaPlayerComponent.getMediaPlayer().getMediaMeta();
         gui.currentMediaModel.clear();
         gui.currentMediaModel.addElement("Now Playing");
@@ -22,45 +25,44 @@ public class PlayerController extends Controller
         gui.currentMediaModel.addElement("Album: " + meta.getAlbum());
         gui.currentMediaModel.addElement("Length: " + meta.getLength());
     }
-    private void setSliderBasedPosition(GuiModel gui) 
+    private void setSliderBasedPosition()
     {
+        GuiModel gui = GuiView.getView(null).getGuiModel();
+
         if(!gui.audioMediaPlayerComponent.getMediaPlayer().isSeekable()) 
         {
             return;
         }
-        float positionValue = gui.seekSlider.getValue() / 1000.0f;
-        if(positionValue > 0.99f) 
-        {
-            positionValue = 0.99f;
-        }
-        gui.audioMediaPlayerComponent.getMediaPlayer().setPosition(positionValue);
+        float duration = GuiView.getView(null).getGuiModel().audioMediaPlayerComponent.getMediaPlayer().getLength();
+        int sliderValue = GuiView.getView(null).getGuiModel().seekSlider.getValue();
+        float positionValue = sliderValue / duration;
+
+        GuiView.getView(null).getGuiModel().audioMediaPlayerComponent.getMediaPlayer().setPosition(positionValue);
     }  
-    private void updateUIState(GuiModel gui) 
+    private void updateUIState() 
     {
-        if(!gui.audioMediaPlayerComponent.getMediaPlayer().isPlaying()) 
+        GuiModel gui = GuiView.getView(null).getGuiModel();
+        if(!gui.audioMediaPlayerComponent.getMediaPlayer().isPlaying() 
+                & gui.mousePressedPlaying) 
         {
             gui.audioMediaPlayerComponent.getMediaPlayer().play();
-            if(!gui.mousePressedPlaying) 
-            {
-                try 
-                {
-                    Thread.sleep(500);
-                }
-                catch(InterruptedException e) { }
-                gui.audioMediaPlayerComponent.getMediaPlayer().pause();
-            }
         }
-        int position = (int)(gui.audioMediaPlayerComponent.getMediaPlayer().getPosition() * 1000.0f);
-        setDefaultSliderPosition(position, gui);
+        gui.audioMediaPlayerComponent.getMediaPlayer().parseMedia();
+        float pos = GuiView.getView(null).getGuiModel().audioMediaPlayerComponent.getMediaPlayer().getPosition();
+        float duration = GuiView.getView(null).getGuiModel().audioMediaPlayerComponent.getMediaPlayer().getLength();
+        int position = (int) (pos * duration);
+
+        setDefaultSliderPosition(position);
         gui.worker.cancel(true);
         gui.worker = new UpdateWorker(gui.audioMediaPlayerComponent.getMediaPlayer().getLength(), position);
         gui.worker.execute();
     }
-    private void setDefaultSliderPosition(int position, GuiModel gui) 
+    private void setDefaultSliderPosition(int position) 
     {
-        gui.seekSlider.setValue(position);
+        GuiView.getView(null).getGuiModel().seekSlider.setValue(position);
     }   
-    private void setDefaultSliderPosition(GuiModel gui) {
+    private void setDefaultSliderPosition(GuiModel gui) 
+    {
         gui.seekSlider.setMinimum(0);
         gui.seekSlider.setMaximum(1000);
         gui.seekSlider.setValue(0);
@@ -69,14 +71,14 @@ public class PlayerController extends Controller
     public void play()
     {
         GuiModel gui = GuiView.getView(null).getGuiModel();
-        
+        setDefaultSliderPosition(gui);
         if (gui.audioMediaPlayerComponent == null) 
         {
             new NativeDiscovery().discover();
             gui.audioMediaPlayerComponent = new AudioMediaPlayerComponent();        
         }
         gui.audioMediaPlayerComponent.getMediaPlayer().playMedia("../../../../../../" + gui.selectedMedia);
-
+        gui.audioMediaPlayerComponent.getMediaPlayer().parseMedia();
         if (gui.worker != null)
         {
             gui.worker.cancel(true);
@@ -110,14 +112,12 @@ public class PlayerController extends Controller
         {
             gui.mousePressedPlaying = false;
         }
-        setSliderBasedPosition(gui);
+        setSliderBasedPosition();
     }
-    public void seekMouseReleased()
+    public void seekMouseReleased() 
     {
-        GuiModel gui = GuiView.getView(null).getGuiModel();
-
-        setSliderBasedPosition(gui);
-        updateUIState(gui);
+        setSliderBasedPosition();
+        updateUIState();
     }
     public void exit()
     {
